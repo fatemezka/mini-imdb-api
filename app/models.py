@@ -73,6 +73,11 @@ class Movie(Base):
     updatedAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
+    # relations
+    movie_cast: Mapped['MovieCast'] = relationship(back_populates="movie")
+    movie_writer: Mapped['MovieWriter'] = relationship(back_populates="movie")
+    movie_genre: Mapped['MovieGenre'] = relationship(back_populates="movie")
+
 
 class Cast(Base):
     __tablename__ = 'casts'
@@ -89,6 +94,9 @@ class Cast(Base):
         default=datetime.utcnow, nullable=False)
     updatedAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # relations
+    movie_cast: Mapped['MovieCast'] = relationship(back_populates="cast")
 
 
 class Writer(Base):
@@ -107,6 +115,9 @@ class Writer(Base):
     updatedAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
+    # relations
+    movie_writer: Mapped['MovieWriter'] = relationship(back_populates="writer")
+
 
 class Genre(Base):
     __tablename__ = 'genres'
@@ -118,6 +129,9 @@ class Genre(Base):
         default=datetime.utcnow, nullable=False)
     updatedAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # relations
+    movie_genre: Mapped['MovieGenre'] = relationship(back_populates="genre")
 
 
 class Review(Base):
@@ -137,3 +151,61 @@ class Review(Base):
 
     # relations
     user: Mapped[User] = relationship(back_populates="reviews")
+
+
+class MovieCast(Base):
+    __tablename__ = 'movie_casts'
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True, nullable=False, autoincrement=True)
+    cast_id: Mapped[int] = mapped_column(
+        ForeignKey("casts.id"), nullable=False)
+    movie_id: Mapped[int] = mapped_column(
+        ForeignKey("movies.id"), nullable=False)
+    star: Mapped[bool] = mapped_column(nullable=False, default=False)
+    createdAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, nullable=False)
+    updatedAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # relations
+    movie: Mapped[Movie] = relationship(back_populates="movie_cast")
+    cast: Mapped[Cast] = relationship(back_populates="movie_cast")
+
+
+class MovieWriter(Base):
+    __tablename__ = 'movie_writers'
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True, nullable=False, autoincrement=True)
+    writer_id: Mapped[int] = mapped_column(
+        ForeignKey("writers.id"), nullable=False)
+    movie_id: Mapped[int] = mapped_column(
+        ForeignKey("movies.id"), nullable=False)
+    createdAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, nullable=False)
+    updatedAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # relations
+    movie: Mapped[Movie] = relationship(back_populates="movie_writer")
+    writer: Mapped[Writer] = relationship(back_populates="movie_writer")
+
+
+class MovieGenre(Base):
+    __tablename__ = 'movie_genres'
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True, nullable=False, autoincrement=True)
+    genre_id: Mapped[int] = mapped_column(
+        ForeignKey("genres.id"), nullable=False)
+    movie_id: Mapped[int] = mapped_column(
+        ForeignKey("movies.id"), nullable=False)
+    createdAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, nullable=False)
+    updatedAt: Mapped[datetime] = mapped_column(
+        default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+    # relations
+    movie: Mapped[Movie] = relationship(back_populates="movie_genre")
+    genre: Mapped[Genre] = relationship(back_populates="movie_genre")

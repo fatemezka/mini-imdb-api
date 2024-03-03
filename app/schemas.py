@@ -1,8 +1,7 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from typing import Optional
-from app.models import Gender, ListingType
-from datetime import date, datetime
-from app.utils.error_handler import ErrorHandler
+from app.models import Gender
+from datetime import date
 
 
 # User
@@ -45,23 +44,3 @@ class IUpdateUserController(BaseModel):
     fullname: Optional[str] = None
     dob: Optional[date] = None
     gender: Optional[Gender] = None
-
-
-# Listing
-class ICreateListingBody(BaseModel):
-    type: ListingType
-    availableNow: bool
-    address: str
-
-
-class ICreateListingController(BaseModel):
-    type: ListingType
-    availableNow: bool
-    ownerId: int
-    address: str
-
-
-class IUpdateListing(BaseModel):
-    type: ListingType
-    availableNow: bool
-    address: str
