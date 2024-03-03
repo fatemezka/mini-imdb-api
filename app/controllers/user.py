@@ -17,8 +17,8 @@ class UserController:
         user = (await self.db.execute(select(User).where(User.id == id))).scalar_one_or_none()
         return user
 
-    async def get_by_username(self, userName: str):
-        user = (await self.db.execute(select(User).where(User.userName == userName))).scalar_one_or_none()
+    async def get_by_username(self, username: str):
+        user = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
         if not user:
             raise ErrorHandler.not_found("User")
         return user
@@ -34,8 +34,8 @@ class UserController:
 
         async with self.db as async_session:
             new_user = User(
-                userName=user_items["userName"],
-                fullName=user_items["fullName"],
+                username=user_items["username"],
+                fullname=user_items["fullname"],
                 email=user_items["email"],
                 hashedPassword=user_items["hashedPassword"],
                 dob=user_items["dob"],
@@ -94,44 +94,44 @@ class UserController:
         if errors:
             raise ErrorHandler.bad_request(errors)
 
-    def validate_username_characters(self, userName: str):
+    def validate_username_characters(self, username: str):
         errors = []
 
         # Check length
-        if len(userName) < 4:
-            errors.append("userName length must be at least 4 characters.")
+        if len(username) < 4:
+            errors.append("username length must be at least 4 characters.")
 
         # Check for uppercase letters
-        if any(char.isupper() for char in userName):
+        if any(char.isupper() for char in username):
             errors.append(
-                "UserName must not contain any uppercase letter.")
+                "username must not contain any uppercase letter.")
 
         # Check for space
-        if " " in userName:
+        if " " in username:
             errors.append(
-                "Username must not contain space characters.")
+                "username must not contain space characters.")
 
         # Check for -
-        if "-" in userName:
+        if "-" in username:
             errors.append(
-                "Username must not contain - characters.")
+                "username must not contain - characters.")
 
         # Check for special characters
-        if re.search(r'[!#$%^&*(),.?":{}|<>]', userName):
+        if re.search(r'[!#$%^&*(),.?":{}|<>]', username):
             errors.append(
-                "Username must not contain special characters.")
+                "username must not contain special characters.")
 
         if errors:
             raise ErrorHandler.bad_request(errors)
 
-    async def check_username_exists(self, userName: str):
-        user = (await self.db.execute(select(User).where(User.userName == userName))).scalar_one_or_none()
+    async def check_username_exists(self, username: str):
+        user = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
         if not user:
             raise ErrorHandler.bad_request(
                 "User with this username does not exist.")
 
-    async def check_username_not_exists(self, userName: str):
-        user = (await self.db.execute(select(User).where(User.userName == userName))).scalar_one_or_none()
+    async def check_username_not_exists(self, username: str):
+        user = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
         if user:
             raise ErrorHandler.bad_request(
                 "User with this username does exist.")
@@ -141,8 +141,8 @@ class UserController:
         if user:
             raise ErrorHandler.bad_request("User with this email does exist.")
 
-    async def verify_password(self, userName: str, password: str):
-        user = await self.get_by_username(userName=userName)
+    async def verify_password(self, username: str, password: str):
+        user = await self.get_by_username(username=username)
         is_valid_password = verify_password(password, user.hashedPassword)
 
         if not is_valid_password:
@@ -152,14 +152,14 @@ class UserController:
         if (scope == "user" and operation not in USER_SCOPES) or (scope == "admin" and operation not in ADMIN_SCOPES):
             raise ErrorHandler.access_denied(operation)
 
-    async def check_username_not_repeat(self, user_id, userName):
-        existing_username = (await self.db.execute(select(User).where(User.userName == userName))).scalar_one_or_none()
+    async def check_username_not_repeat(self, user_id, username):
+        existing_username = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
 
         user = (await self.db.execute(select(User).where(User.id == user_id))).scalar_one_or_none()
 
         if existing_username and existing_username.id != user.id:
             raise ErrorHandler.bad_request(
-                custom_message="UserName is repeated.")
+                custom_message="username is repeated.")
 
     async def check_email_not_repeat(self, user_id, email):
         existing_email = (await self.db.execute(select(User).where(User.email == email))).scalar_one_or_none()

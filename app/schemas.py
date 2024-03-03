@@ -7,42 +7,42 @@ from app.utils.error_handler import ErrorHandler
 
 # User
 class ICreateUserBody(BaseModel):
-    userName: str
+    username: str
     email: str
     password: str
-    fullName: Optional[str] = None
+    fullname: Optional[str] = None
     dob: Optional[str] = None
     gender: Optional[Gender] = None
 
 
 class ICreateUserController(BaseModel):
-    userName: str
+    username: str
     email: str
     hashedPassword: str
-    fullName: Optional[str] = None
+    fullname: Optional[str] = None
     dob: Optional[date] = None
     gender: Optional[Gender] = None
 
 
 class ILoginUser(BaseModel):
-    userName: str
+    username: str
     password: str
 
 
 class IUpdateUserBody(BaseModel):
-    userName: str
+    username: str
     email: str
     password: Optional[str] = None
-    fullName: Optional[str] = None
+    fullname: Optional[str] = None
     dob: Optional[str] = None
     gender: Optional[Gender] = None
 
 
 class IUpdateUserController(BaseModel):
-    userName: str
+    username: str
     email: str
     hashedPassword: str
-    fullName: Optional[str] = None
+    fullname: Optional[str] = None
     dob: Optional[date] = None
     gender: Optional[Gender] = None
 

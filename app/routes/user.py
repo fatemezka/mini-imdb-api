@@ -22,10 +22,10 @@ async def register_route(
     user_controller = UserController(db)
 
     # check username
-    await user_controller.check_username_not_exists(data.userName)
+    await user_controller.check_username_not_exists(data.username)
 
     # check username characters
-    user_controller.validate_username_characters(data.userName)
+    user_controller.validate_username_characters(data.username)
 
     # check email
     await user_controller.check_email_not_exists(data.email)
@@ -42,10 +42,10 @@ async def register_route(
 
     # create a new user
     user_items = {
-        "userName": data.userName,
+        "username": data.username,
         "email": data.email,
         "hashedPassword": hashed_password,
-        "fullName": data.fullName or None,
+        "fullname": data.fullname or None,
         "dob": data.dob or None,
         "gender": data.gender or None
     }
@@ -74,15 +74,15 @@ async def login_route(
     user_controller = UserController(db)
 
     # check username
-    await user_controller.check_username_exists(data.userName)
+    await user_controller.check_username_exists(data.username)
 
     # verify password
-    await user_controller.verify_password(data.userName, data.password)
+    await user_controller.verify_password(data.username, data.password)
 
     await db.close()
 
     # generate jwt token
-    user = await user_controller.get_by_username(data.userName)
+    user = await user_controller.get_by_username(data.username)
     token = token_generator(user_id=user.id, scope="user")  # or admin
 
     # store user token in redis
@@ -152,11 +152,11 @@ async def update_route(
     user_controller = UserController(db)
 
     # check username characters
-    user_controller.validate_username_characters(data.userName)
+    user_controller.validate_username_characters(data.username)
 
     # check username is not repeat
     await user_controller.check_username_not_repeat(
-        user_id=id, userName=data.userName)
+        user_id=id, username=data.username)
 
     # check email is not repeat
     await user_controller.check_email_not_repeat(user_id=id, email=data.email)
@@ -175,10 +175,10 @@ async def update_route(
 
     # update user
     user_items = {
-        "userName": data.userName,
+        "username": data.username,
         "email": data.email,
         "hashedPassword": hashed_password,
-        "fullName": data.fullName or None,
+        "fullname": data.fullname or None,
         "dob": data.dob or None,
         "gender": data.gender or None
     }
