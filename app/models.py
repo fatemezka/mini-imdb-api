@@ -1,4 +1,5 @@
 from sqlalchemy import String, Text, Enum, ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime, date
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.database import Base
@@ -11,6 +12,14 @@ class Gender(PyEnum):
     MALE = "male"
     FEMALE = "female"
     NOT_SPECIFIED = "not_specified"
+
+
+class ReviewRate(PyEnum):
+    ONE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
 
 
 # Models
@@ -62,8 +71,8 @@ class Movie(Base):
     duration: Mapped[float] = mapped_column(nullable=False)
     release_year: Mapped[int] = mapped_column(nullable=False)
     cover: Mapped[str] = mapped_column(String(255), nullable=False)
-    countries: Mapped[list[str]] = mapped_column(nullable=False)
-    languages: Mapped[list[str]] = mapped_column(nullable=False)
+    countries = mapped_column(ARRAY(String), nullable=False)
+    languages = mapped_column(ARRAY(String), nullable=False)
     director: Mapped[str] = mapped_column(nullable=False)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     storyline: Mapped[str] = mapped_column(Text, nullable=False)
@@ -142,7 +151,7 @@ class Review(Base):
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String(255), nullable=True)
-    rate: Mapped[int] = mapped_column(Enum(1, 2, 3, 4, 5), nullable=False)
+    rate: Mapped[ReviewRate] = mapped_column(nullable=False)
     text: Mapped[str] = mapped_column(Text, nullable=False)
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)

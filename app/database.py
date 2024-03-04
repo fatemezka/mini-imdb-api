@@ -1,6 +1,5 @@
-import aioredis
+# import aioredis
 import os
-from app.models import User, Movie, Cast, Writer, Genre, Review  # TODO
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from dotenv import load_dotenv
@@ -10,7 +9,7 @@ load_dotenv()
 # POSTGRESQL
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
-engine = create_async_engine(url=SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_async_engine(url=SQLALCHEMY_DATABASE_URL, echo=False)
 SessionLocal = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -24,6 +23,7 @@ class Base(DeclarativeBase):
 
 async def create_all_tables():
     async with engine.begin() as conn:
+        from app.models import User, Movie, Cast, Writer, Genre, Review, MovieCast, MovieWriter, MovieGenre  # TODO
         await conn.run_sync(Base.metadata.create_all)
     await engine.dispose()
 
