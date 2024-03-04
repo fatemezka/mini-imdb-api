@@ -5,7 +5,7 @@ from app.utils.error_handler import ErrorHandler
 from app.controllers.listing import ListingController
 from app.controllers.user import UserController
 from app.schemas import ICreateListingBody, IUpdateListing
-from app.authentication import get_token_info
+from app.dependencies.authentication import get_token_info
 
 router = APIRouter()
 

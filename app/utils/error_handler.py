@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 from fastapi import status, HTTPException
-from app.data.access_permissions import USER_SCOPES, ADMIN_SCOPES
 
 
 class CustomException(HTTPException):

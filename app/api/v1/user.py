@@ -4,9 +4,9 @@ from app.database import get_db
 from app.schemas import ICreateUserBody, ILoginUser, IUpdateUserBody
 from app.utils.error_handler import ErrorHandler
 from app.controllers.user import UserController
-from app.authentication import token_generator, get_token_info
+from app.dependencies.authentication import token_generator, get_token_info
 from app.utils.password_operator import get_password_hash
-from app.redis import store_redis_token, remove_redis_token
+from app.controllers.redis_pool import store_redis_token, remove_redis_token
 from datetime import datetime
 
 

@@ -1,13 +1,9 @@
-# import aioredis
 import os
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from dotenv import load_dotenv
 
-load_dotenv()
 
-# POSTGRESQL
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URL = os.environ.get('DATABASE_URL')
 
 engine = create_async_engine(url=SQLALCHEMY_DATABASE_URL, echo=False)
 SessionLocal = async_sessionmaker(
@@ -34,12 +30,3 @@ async def get_db():
         yield db
     finally:
         await db.close()
-
-
-# REDIS
-REDIS_URL = os.getenv("REDIS_URL")
-
-
-async def create_redis_pool():
-    redis_pool = await aioredis.from_url(url=REDIS_URL, encoding="utf-8", decode_responses=True)
-    return redis_pool

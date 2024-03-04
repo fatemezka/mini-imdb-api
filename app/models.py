@@ -1,8 +1,8 @@
-from sqlalchemy import String, Text, Enum, ForeignKey
+from sqlalchemy import String, Text, ForeignKey
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime, date
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from app.database import Base
+from app.db.base import Base
 from enum import Enum as PyEnum
 from typing import List
 
