@@ -14,6 +14,9 @@ class CustomMiddleware(BaseHTTPMiddleware):
             # check request count per minute
             await self.check_request_attempts(request)
 
+            # log request info
+            self.log_request(request)
+
             # Continue processing the request
             response: Response = await call_next(request)
             return response
