@@ -31,7 +31,7 @@ class User(Base):
     username: Mapped[str] = mapped_column(
         String(255), nullable=False, unique=True)
     fullname: Mapped[str] = mapped_column(String(255), nullable=True)
-    profile_pic: Mapped[str] = mapped_column(String(255), nullable=True)
+    profilePic: Mapped[str] = mapped_column(String(255), nullable=True)
     email: Mapped[str] = mapped_column(
         String(255), nullable=False, unique=True)
     hashedPassword: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -69,7 +69,7 @@ class Movie(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     rate: Mapped[float] = mapped_column(nullable=False, default=1.0)
     duration: Mapped[float] = mapped_column(nullable=False)
-    release_year: Mapped[int] = mapped_column(nullable=False)
+    releaseYear: Mapped[int] = mapped_column(nullable=False)
     cover: Mapped[str] = mapped_column(String(255), nullable=False)
     countries = mapped_column(ARRAY(String), nullable=False)
     languages = mapped_column(ARRAY(String), nullable=False)
@@ -83,9 +83,9 @@ class Movie(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie_cast: Mapped['MovieCast'] = relationship(back_populates="movie")
-    movie_writer: Mapped['MovieWriter'] = relationship(back_populates="movie")
-    movie_genre: Mapped['MovieGenre'] = relationship(back_populates="movie")
+    movieCast: Mapped['MovieCast'] = relationship(back_populates="movie")
+    movieWriter: Mapped['MovieWriter'] = relationship(back_populates="movie")
+    movieGenre: Mapped['MovieGenre'] = relationship(back_populates="movie")
 
 
 class Cast(Base):
@@ -94,7 +94,7 @@ class Cast(Base):
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
     fullname: Mapped[str] = mapped_column(String(255), nullable=True)
-    profile_pic: Mapped[str] = mapped_column(String(255), nullable=True)
+    profilePic: Mapped[str] = mapped_column(String(255), nullable=True)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     dob: Mapped[date] = mapped_column(nullable=True)
     gender: Mapped[Gender] = mapped_column(
@@ -105,7 +105,7 @@ class Cast(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie_cast: Mapped['MovieCast'] = relationship(back_populates="cast")
+    movieCast: Mapped['MovieCast'] = relationship(back_populates="cast")
 
 
 class Writer(Base):
@@ -114,7 +114,7 @@ class Writer(Base):
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
     fullname: Mapped[str] = mapped_column(String(255), nullable=True)
-    profile_pic: Mapped[str] = mapped_column(String(255), nullable=True)
+    profilePic: Mapped[str] = mapped_column(String(255), nullable=True)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     dob: Mapped[date] = mapped_column(nullable=True)
     gender: Mapped[Gender] = mapped_column(
@@ -125,7 +125,7 @@ class Writer(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie_writer: Mapped['MovieWriter'] = relationship(back_populates="writer")
+    movieWriter: Mapped['MovieWriter'] = relationship(back_populates="writer")
 
 
 class Genre(Base):
@@ -140,7 +140,7 @@ class Genre(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie_genre: Mapped['MovieGenre'] = relationship(back_populates="genre")
+    movieGenre: Mapped['MovieGenre'] = relationship(back_populates="genre")
 
 
 class Review(Base):
@@ -148,7 +148,7 @@ class Review(Base):
 
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(
+    userId: Mapped[int] = mapped_column(
         ForeignKey("users.id"), nullable=False)
     title: Mapped[str] = mapped_column(String(255), nullable=True)
     rate: Mapped[ReviewRate] = mapped_column(nullable=False)
@@ -167,11 +167,11 @@ class MovieCast(Base):
 
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
-    cast_id: Mapped[int] = mapped_column(
+    castId: Mapped[int] = mapped_column(
         ForeignKey("casts.id"), nullable=False)
-    movie_id: Mapped[int] = mapped_column(
+    movieId: Mapped[int] = mapped_column(
         ForeignKey("movies.id"), nullable=False)
-    star: Mapped[bool] = mapped_column(nullable=False, default=False)
+    isStar: Mapped[bool] = mapped_column(nullable=False, default=False)
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)
     updatedAt: Mapped[datetime] = mapped_column(
@@ -187,9 +187,9 @@ class MovieWriter(Base):
 
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
-    writer_id: Mapped[int] = mapped_column(
+    writerId: Mapped[int] = mapped_column(
         ForeignKey("writers.id"), nullable=False)
-    movie_id: Mapped[int] = mapped_column(
+    movieId: Mapped[int] = mapped_column(
         ForeignKey("movies.id"), nullable=False)
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)
@@ -206,9 +206,9 @@ class MovieGenre(Base):
 
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
-    genre_id: Mapped[int] = mapped_column(
+    genreId: Mapped[int] = mapped_column(
         ForeignKey("genres.id"), nullable=False)
-    movie_id: Mapped[int] = mapped_column(
+    movieId: Mapped[int] = mapped_column(
         ForeignKey("movies.id"), nullable=False)
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)
