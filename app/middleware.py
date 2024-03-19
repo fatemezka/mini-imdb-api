@@ -3,7 +3,7 @@ from datetime import datetime
 from starlette.middleware.base import BaseHTTPMiddleware
 from datetime import datetime
 from app.utils.error_handler import CustomException
-from app.controllers.redis_pool import RedisPool
+from app.controllers.redis import RedisController
 from fastapi.responses import JSONResponse
 import logging
 
@@ -43,5 +43,5 @@ class CustomMiddleware(BaseHTTPMiddleware):
         if not request.client:
             return  # for unit-testing
         client_ip = request.client.host
-        redis_pool = RedisPool()
-        await redis_pool.increase_request_attempts(client_ip)
+        redis_controller = RedisController()
+        await redis_controller.increase_request_attempts(client_ip)

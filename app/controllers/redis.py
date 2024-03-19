@@ -3,7 +3,7 @@ from app.db.redis import create_redis_pool
 from app.utils.error_handler import ErrorHandler
 
 
-class RedisPool:
+class RedisController:
     async def __init__(self):
         self.redis_pool = await create_redis_pool()
 
