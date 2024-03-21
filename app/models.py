@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.db.base import Base
 from enum import Enum as PyEnum
 from typing import List
+import os
 
 
 # Enums
@@ -55,8 +56,9 @@ class User(Base):
             return False, "Invalid date format. Date should be in dd-mm-YYYY format."
 
         # Validate minimum year
-        if dob.year <= 1940:
-            return False, "Year of birth should be after 1940."
+        MINIMUM_USER_BIRTH_YEAR = os.environ.get('MINIMUM_USER_BIRTH_YEAR')
+        if dob.year <= MINIMUM_USER_BIRTH_YEAR:
+            return False, f"Year of birth should be after {MINIMUM_USER_BIRTH_YEAR}."
 
         return True, dob
 
@@ -76,7 +78,7 @@ class Movie(Base):
     director: Mapped[str] = mapped_column(nullable=False)
     summary: Mapped[str] = mapped_column(Text, nullable=False)
     storyline: Mapped[str] = mapped_column(Text, nullable=False)
-    budget: Mapped[float] = mapped_column(nullable=False)
+    budget: Mapped[float] = mapped_column(nullable=False)  # based on dollar
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)
     updatedAt: Mapped[datetime] = mapped_column(
@@ -133,7 +135,8 @@ class Genre(Base):
 
     id: Mapped[int] = mapped_column(
         primary_key=True, nullable=False, autoincrement=True)
-    title: Mapped[str] = mapped_column(String(255), nullable=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
     createdAt: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, nullable=False)
     updatedAt: Mapped[datetime] = mapped_column(
@@ -178,8 +181,8 @@ class MovieCast(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie: Mapped[Movie] = relationship(back_populates="movie_cast")
-    cast: Mapped[Cast] = relationship(back_populates="movie_cast")
+    movie: Mapped[Movie] = relationship(back_populates="movieCast")
+    cast: Mapped[Cast] = relationship(back_populates="movieCast")
 
 
 class MovieWriter(Base):
@@ -197,8 +200,8 @@ class MovieWriter(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie: Mapped[Movie] = relationship(back_populates="movie_writer")
-    writer: Mapped[Writer] = relationship(back_populates="movie_writer")
+    movie: Mapped[Movie] = relationship(back_populates="movieWriter")
+    writer: Mapped[Writer] = relationship(back_populates="movieWriter")
 
 
 class MovieGenre(Base):
@@ -216,5 +219,5 @@ class MovieGenre(Base):
         default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
     # relations
-    movie: Mapped[Movie] = relationship(back_populates="movie_genre")
-    genre: Mapped[Genre] = relationship(back_populates="movie_genre")
+    movie: Mapped[Movie] = relationship(back_populates="movieGenre")
+    genre: Mapped[Genre] = relationship(back_populates="movieGenre")

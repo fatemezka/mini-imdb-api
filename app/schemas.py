@@ -26,21 +26,3 @@ class ICreateUserController(BaseModel):
 class ILoginUser(BaseModel):
     username: str
     password: str
-
-
-class IUpdateUserBody(BaseModel):
-    username: str
-    email: str
-    password: Optional[str] = None
-    fullname: Optional[str] = None
-    dob: Optional[str] = None
-    gender: Optional[Gender] = None
-
-
-class IUpdateUserController(BaseModel):
-    username: str
-    email: str
-    hashedPassword: str
-    fullname: Optional[str] = None
-    dob: Optional[date] = None
-    gender: Optional[Gender] = None

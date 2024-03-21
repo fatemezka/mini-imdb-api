@@ -22,7 +22,7 @@ async def startup_db():
 
 # Middlewares
 allowed_origins = [
-    "http://localhost:3000",  # TODO get from db
+    "http://localhost:3000",  # TODO get from redis
 ]
 app.add_middleware(
     CORSMiddleware,

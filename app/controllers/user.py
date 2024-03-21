@@ -5,7 +5,6 @@ from app.schemas import ICreateUserController, IUpdateUserController
 import re
 from app.utils.error_handler import ErrorHandler
 from app.utils.password_operator import verify_password
-from app.data.access_permissions import USER_SCOPES, ADMIN_SCOPES
 from datetime import datetime
 
 
@@ -19,8 +18,8 @@ class UserController:
 
     async def get_by_username(self, username: str):
         user = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
-        if not user:
-            raise ErrorHandler.not_found("User")
+        # if not user:
+        # raise ErrorHandler.not_found("User")
         return user
 
     async def get_by_email(self, email: str):
@@ -28,10 +27,6 @@ class UserController:
         return user
 
     async def create(self, user_items: ICreateUserController):
-        # dob_date = None
-        # if user_items["dob"] != None:
-        #     dob_date = await self.validate_dob(user_items["dob"])
-
         async with self.db as async_session:
             new_user = User(
                 username=user_items["username"],
@@ -55,7 +50,7 @@ class UserController:
             await self.db.commit()
         return user
 
-    async def delete(self, id: int):
+    async def delete_by_id(self, id: int):
         user = await self.get_by_id(id=id)
 
         if user:
@@ -148,9 +143,9 @@ class UserController:
         if not is_valid_password:
             raise ErrorHandler.bad_request("Password is incorrect")
 
-    def validate_scope(self, scope, operation):
-        if (scope == "user" and operation not in USER_SCOPES) or (scope == "admin" and operation not in ADMIN_SCOPES):
-            raise ErrorHandler.access_denied(operation)
+    # def validate_scope(self, scope, operation):
+    #     if (scope == "user" and operation not in USER_SCOPES) or (scope == "admin" and operation not in ADMIN_SCOPES):
+    #         raise ErrorHandler.access_denied(operation)
 
     async def check_username_not_repeat(self, user_id, username):
         existing_username = (await self.db.execute(select(User).where(User.username == username))).scalar_one_or_none()
